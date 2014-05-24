@@ -51,7 +51,7 @@ class MyLexer:
     t_ASSIGN = r'<-'
     t_SEMI = r';'
 
-    t_ignore = '\t\n\r'
+    t_ignore = ' \t\n\r'
 
     def build(self, **kwargs):
         self.lexer = lex.lex(object=self, **kwargs)
@@ -92,7 +92,7 @@ class MyLexer:
                 break
             print tok
 
-#teste
+# teste
 #l = MyLexer()
-#l.build()
-#l.test("a<-4.0-4")
+# l.build()
+# l.test("a<-4.0-4")
