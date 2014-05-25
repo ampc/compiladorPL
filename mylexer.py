@@ -92,7 +92,7 @@ class MyLexer:
                 break
             print tok
 
-# teste
-#l = MyLexer()
-# l.build()
-# l.test("a<-4.0-4")
+#teste
+l = MyLexer()
+l.build()
+l.test("a<-4.0-4")

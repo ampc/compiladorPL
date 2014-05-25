@@ -22,27 +22,27 @@ class MyParser:
     def parse(self, text):
         return self.parser.parse(input=text, debug=True)
 
-    def p_command(self, t):
+    def p_command(self, p):
         '''command : command2 SEMI command
                    | empty'''
 
-    def p_command2(self, t):
+    def p_command2(self, p):
         '''command2 : command_assign
                     | command_while
                     | command_if'''
 
-    def p_command_assign(self, t):
+    def p_command_assign(self, p):
         'command_assign : ID ASSIGN expression'
-        self.symbol_table[t[1]] = t[3]
+        self.symbol_table[p[1]] = p[3]
 
-    def p_command_while(self, t):
+    def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
 
-    def p_command_if(self, t):
+    def p_command_if(self, p):
         '''command_if : IF expression THEN BEGIN command
                         | IF expression THEN BEGIN command ELSE BEGIN command END'''
 
-    def p_expression_binary(self, t):
+    def p_expression_binary(self, p):
         '''expression : expression PLUS expression
                         | expression MINUS expression
                         | expression MULT expression
@@ -53,54 +53,54 @@ class MyParser:
                         | expression GREATEREQUAL expression
                         | expression LESSER expression
                         | expression LESSEREQUAL expression'''
-        if t[2] == '+':
-            t[0] = t[1] + t[3]
-        elif t[2] == '-':
-            t[0] = t[1] - t[3]
-        elif t[2] == '*':
-            t[0] = t[1] * t[3]
-        elif t[2] == '/':
-            t[0] = t[1] / t[3]
-        elif t[2] == '==':
-            t[0] = t[1] == t[3]
-        elif t[2] == '/=':
-            t[0] = t[1] != t[3]
-        elif t[2] == '>':
-            t[0] = t[1] > t[3]
-        elif t[2] == '>=':
-            t[0] = t[1] >= t[3]
-        elif t[2] == '<':
-            t[0] = t[1] < t[3]
-        elif t[2] == '<':
-            t[0] = t[1] <= t[3]
+        if p[2] == '+':
+            p[0] = p[1] + p[3]
+        elif p[2] == '-':
+            p[0] = p[1] - p[3]
+        elif p[2] == '*':
+            p[0] = p[1] * p[3]
+        elif p[2] == '/':
+            p[0] = p[1] / p[3]
+        elif p[2] == '==':
+            p[0] = p[1] == p[3]
+        elif p[2] == '/=':
+            p[0] = p[1] != p[3]
+        elif p[2] == '>':
+            p[0] = p[1] > p[3]
+        elif p[2] == '>=':
+            p[0] = p[1] >= p[3]
+        elif p[2] == '<':
+            p[0] = p[1] < p[3]
+        elif p[2] == '<':
+            p[0] = p[1] <= p[3]
 
-    def p_expression_uminus(self, t):
+    def p_expression_uminus(self, p):
         'expression : MINUS expression %prec UMINUS'
-        t[0] = -t[2]
+        p[0] = -p[2]
 
-    def p_expression_group(self, t):
+    def p_expression_group(self, p):
         'expression : LPAREN expression RPAREN'
-        t[0] = t[2]
+        p[0] = p[2]
 
-    def p_expression_real(self, t):
+    def p_expression_real(self, p):
         'expression : REAL'
-        t[0] = t[1]
+        p[0] = p[1]
 
-    def p_expression_int(self, t):
+    def p_expression_int(self, p):
         'expression : INT'
-        t[0] = t[1]
+        p[0] = p[1]
 
-    def p_expression_id(self, t):
+    def p_expression_id(self, p):
         'expression : ID'
         try:
-            t[0] = self.symbol_table[t[1]]
+            p[0] = self.symbol_table[p[1]]
         except LookupError:
-            print("Undefined name '%s'" % t[1])
-            t[0] = 0
+            print("Undefined name '%s'" % p[1])
+            p[0] = 0
 
-    def p_empty(self, t):
+    def p_empty(self, p):
         'empty :'
         pass
 
-    def p_error(self, t):
-        print("Syntax error at '%s'" % t.value)
+    def p_error(self, p):
+        print("Syntax error at '%s'" % p.value)
