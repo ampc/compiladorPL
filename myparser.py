@@ -40,7 +40,7 @@ class MyParser:
     def p_command_assign(self, p):
         'command_assign : ID ASSIGN expression'
         self.symbol_table[p[1]] = p[3]
-		p[0]=Node("command_assign", [p[2],p[3],p[4]])
+		p[0]=Node("command_assign", [p[1],p[3]])
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
