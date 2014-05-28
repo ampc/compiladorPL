@@ -20,8 +20,8 @@ class MyParser:
         self.tokens = self.lexer.tokens
         self.parser = yacc.yacc(module=self)
 
-    def parse(self, text):
-        return self.parser.parse(input=text, debug=True)
+    # def parse(self, text):
+        # return self.parser.parse(input=text, debug=True)
 
     def p_command(self, p):
         '''command : command2 SEMI command
@@ -40,7 +40,7 @@ class MyParser:
     def p_command_assign(self, p):
         'command_assign : ID ASSIGN expression'
         self.symbol_table[p[1]] = p[3]
-        p[0] = Node("command_assign", [p[1], p[3]])
+        p[0] = Node("command_assign", [p[1], p[3]],p[2])
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
@@ -96,7 +96,7 @@ class MyParser:
     def p_expression_group(self, p):
         'expression : LPAREN expression RPAREN'
         p[0] = Node("expression_group", [p[2]])
-
+	
     def p_expression_real(self, p):
         'expression : REAL'
         p[0] = Node("expression_real", [], p[1])

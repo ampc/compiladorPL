@@ -5,7 +5,8 @@ class Node:
 		self.value = value
 
 auxd = {}
-		
+depth=0		
+count=0
 		
 		#while e if precisam de ser corrigidos
 def generate(node):
@@ -33,6 +34,9 @@ def generate(node):
 			depth-=1
 		if depth ==0:
 			print "MAIN: "
+		return expr
+	if node.type =="command2":
+		expr+=str(generate(node.children[0]))
 		return expr
 	elif node.type == "command_if":
 		label="LABEL"+str(labelcount)
@@ -66,7 +70,7 @@ def generate(node):
 		return expr
 	elif node.type in ["expression_real","expression_int"]:
 		count +=1
-		return value
+		return node.value
 	elif node.type == "expression_uminus":
 		return value + str(generate(node.children[0]))
 	elif node.type=="expression_binary":
@@ -89,5 +93,5 @@ def generate(node):
 			return temp
 		return expr
 	elif node.type=="command_assign":
-		expr = str(generate(node.children[0])) + " " + value + " " + str(generate(node.children[1]))+"\n"
+		expr = str(node.children[0]) + " " + node.value + " " + str(generate(node.children[1]))+"\n"
 		return expr
