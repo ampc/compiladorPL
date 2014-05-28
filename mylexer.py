@@ -93,6 +93,6 @@ class MyLexer:
             print tok
 
 #teste
-l = MyLexer()
-l.build()
-l.test("a<-4.0-4")
+#l = MyLexer()
+#l.build()
+#l.test("a<-4.0-4")
