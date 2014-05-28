@@ -67,7 +67,6 @@ class MyParser:
                         | expression LESSEREQUAL expression'''
         p[0] = Node("expression_binary", [p[1], p[3]], p[2])
 # aproveitar isto para fazer calculo do resultado da expressao usando o no
-<<<<<<< HEAD
         # if p[2] == '+':
             # p[0] = p[1] + p[3]
         # elif p[2] == '-':
@@ -111,7 +110,6 @@ class MyParser:
         elif p[2] == '<':
             p[0] = p[1] <= p[3]
             '''
->>>>>>> 8c007629e8b49b3b1166f425d69c7f366d96a5ec
     def p_expression_uminus(self, p):
         'expression : MINUS expression %prec UMINUS'
         # p[0] = -p[2]
