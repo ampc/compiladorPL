@@ -67,26 +67,26 @@ class MyParser:
                         | expression LESSEREQUAL expression'''
         p[0] = Node("expression_binary", [p[1], p[3]], p[2])
 # aproveitar isto para fazer calculo do resultado da expressao usando o no
-        if p[2] == '+':
-            p[0] = p[1] + p[3]
-        elif p[2] == '-':
-            p[0] = p[1] - p[3]
-        elif p[2] == '*':
-            p[0] = p[1] * p[3]
-        elif p[2] == '/':
-            p[0] = p[1] / p[3]
-        elif p[2] == '==':
-            p[0] = p[1] == p[3]
-        elif p[2] == '/=':
-            p[0] = p[1] != p[3]
-        elif p[2] == '>':
-            p[0] = p[1] > p[3]
-        elif p[2] == '>=':
-            p[0] = p[1] >= p[3]
-        elif p[2] == '<':
-            p[0] = p[1] < p[3]
-        elif p[2] == '<':
-            p[0] = p[1] <= p[3]
+        # if p[2] == '+':
+            # p[0] = p[1] + p[3]
+        # elif p[2] == '-':
+            # p[0] = p[1] - p[3]
+        # elif p[2] == '*':
+            # p[0] = p[1] * p[3]
+        # elif p[2] == '/':
+            # p[0] = p[1] / p[3]
+        # elif p[2] == '==':
+            # p[0] = p[1] == p[3]
+        # elif p[2] == '/=':
+            # p[0] = p[1] != p[3]
+        # elif p[2] == '>':
+            # p[0] = p[1] > p[3]
+        # elif p[2] == '>=':
+            # p[0] = p[1] >= p[3]
+        # elif p[2] == '<':
+            # p[0] = p[1] < p[3]
+        # elif p[2] == '<':
+            # p[0] = p[1] <= p[3]
 
     def p_expression_uminus(self, p):
         'expression : MINUS expression %prec UMINUS'
@@ -99,11 +99,11 @@ class MyParser:
 
     def p_expression_real(self, p):
         'expression : REAL'
-        p[0] = Node("expression_real", , p[1])
+        p[0] = Node("expression_real", [], p[1])
 
     def p_expression_int(self, p):
         'expression : INT'
-        p[0] = Node("expression_int", , p[1])
+        p[0] = Node("expression_int", [], p[1])
 
     def p_expression_id(self, p):
         'expression : ID'
