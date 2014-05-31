@@ -11,7 +11,7 @@ try:
     parser = MyParser()
     p = yacc.parse(f.read())
     s = generate(p)
-	
+
     print s
 except EOFError:
     print "Could not open file %s."
