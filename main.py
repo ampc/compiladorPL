@@ -1,5 +1,5 @@
 #/bin/python
-
+#
 import sys
 from myparser import MyParser
 from mytac import generate
