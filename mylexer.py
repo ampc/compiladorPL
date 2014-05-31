@@ -69,13 +69,14 @@ class MyLexer:
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z_0-9]*'
         t.type = self.keywords.get(t.value, 'ID')
-
+        return t
+        '''
         if t.type != 'ID':
             print "Variable name used is reserved!"
             t.lexer.skip
         else:
             return t
-
+        '''
     def t_comment(self, t):
         r'\#.*'
         pass
