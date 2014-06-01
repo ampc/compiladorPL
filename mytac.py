@@ -1,4 +1,4 @@
-
+import operator
 #auxd = {}
 #depth = 0
 #count = 0
@@ -86,10 +86,54 @@ class Variable(Node):
 
 
 class BinOp(Node):
+	ops={'+': operator.add,
+	'-': operator.sub,
+	'/': operator.div,
+	'*':operator.mul,
+	'==': operator.eq,
+	'/=': operator.ne,
+	'>':operator.gt,
+	'>=':operator.ge,
+	'<':operator.lt,
+	'<=':operator.le,
+	}
+	
+	def __init__(self,e1,e2,op):
+		Node.__init__(self,'binop'):
+		self.e_l=e1
+		self.e_r=e2
+		self.op=op
+		self.mips_op=''
+		
+		self.int_value_calculation()
 
-# aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	def int_value_calculation(self):
+		l=self.e_l.value
+		r=self.e_r.value
+		self.value=ops[self.operator](l,r)
+		
+	
 
-
+class Assign(Node):
+	def __init__(self,v,a):
+		Node.__init__(self,'assign'):
+		self.v=v
+		self.a=a
+		
+	
+	
+class While(Node):
+	def __init__(self,e):
+		Node.__init__(self,'while')
+		self.e=e
+		
+		
+class If(Node):
+	def __init__(self,e):
+		Node.__init__(self,'if')
+		self.e=e
+		
+		
 '''
 def generate(node):
     global labelcount

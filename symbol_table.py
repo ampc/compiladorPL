@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from collections import namedtuple
+from collections import namedtuple #https://docs.python.org/2/library/collections.html
+
 
 '''
 Namedtuples são imutáveis.
