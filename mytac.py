@@ -93,12 +93,24 @@ class BinOp(Node):
 	'<=':operator.le,
 	}
 	
+	mops{'+': 'add',
+	'-': 'sub',
+	'/': 'div',
+	'*': 'mul',
+	'==': 'seq',
+	'/=': 'sne',
+	'>': 'sgt',
+	'>=': 'sge',
+	'<': 'slt',
+	'<=': 'sle',
+	}
+	
 	def __init__(self,e1,op,e2,parser):
 		Node.__init__(self,'binop')
 		self.e_l=e1
 		self.e_r=e2
 		self.op=op
-		self.mips_op=''
+		self.mop=''
 		
 		self.int_value_calculation()
 
@@ -106,7 +118,7 @@ class BinOp(Node):
 		l=self.e_l.value
 		r=self.e_r.value
 		self.value=self.ops[self.operator](l,r)
-		
+		self.mop=self.mops[self.operator]
 	
 
 class Assign(Node):
