@@ -51,7 +51,7 @@ class MyParser:
     def p_command_if(self, p):
         '''command_if : IF expression THEN BEGIN command
                         | IF expression THEN BEGIN command ELSE BEGIN command END'''
-
+        p[0]=p[6]
     def p_expression_binary(self, p):
         '''expression : expression PLUS expression
                         | expression MINUS expression
