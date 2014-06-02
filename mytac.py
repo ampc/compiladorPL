@@ -13,12 +13,12 @@ class Node:
         self.type = node_type
         self.parser = parser
         
-        self.current_registry = self.parser.current_registry
-        self.current_label = self.parser.current_label
+        #self.current_registry = self.parser.current_registry
+        #self.current_label = self.parser.current_label
         self.symbol_table = self.parser.symbol_table
-        self.registry_iterator = self.parser.registry_iterator
+        #self.registry_iterator = self.parser.registry_iterator
 
-        self.file_writer = self.parser.file_writer
+        #self.file_writer = self.parser.file_writer
 
         self.registry_entry = ''
         self.value = None
@@ -48,8 +48,7 @@ class Int(Node):
         self.value = int(num)
 
     def producer(self):
-
-        self.registry_entry = self.current_registry.assign_temporary()
+		self.registry_entry = self.current_registry.assign_temporary()
         self.current_registry.set_temporary(self.registry_entry, self.value)
         code = 'li ' + self.registry_entry + ' ' + str(self.value)
         self.print_code(code)
@@ -65,23 +64,19 @@ class Variable(Node):
         self.value_calculation()
 
     def value_calculation(self):
-        '''
-        Se variável existir na tabela de símbolos, o seu valor e o seu registo são obtidos.
-        Caso contrário, aparece como vazia.
-        '''
+		
 
         table = self.symbol_table
         name = self.name
 
-        if table.has_key(name):
+        '''if table.has_key(name):
             self.exists = True
             self.var_type = table.get_type(name)
             self.registry_entry = table.get_memaddress(name)
-            self.value = self.current_registry.get_register(self.registry_entry)
+            self.value = self.current_registry.get_register(self.registry_entry)'''
 
     def producer(self):
-        ''' Não tem que gerar nada, pois o
- seu valor deverá já estar no registo. '''
+ 
         pass
 
 
@@ -98,8 +93,8 @@ class BinOp(Node):
 	'<=':operator.le,
 	}
 	
-	def __init__(self,e1,e2,op):
-		Node.__init__(self,'binop'):
+	def __init__(self,e1,op,e2,parser):
+		Node.__init__(self,'binop')
 		self.e_l=e1
 		self.e_r=e2
 		self.op=op
@@ -110,13 +105,13 @@ class BinOp(Node):
 	def int_value_calculation(self):
 		l=self.e_l.value
 		r=self.e_r.value
-		self.value=ops[self.operator](l,r)
+		self.value=self.ops[self.operator](l,r)
 		
 	
 
 class Assign(Node):
-	def __init__(self,v,a):
-		Node.__init__(self,'assign'):
+	def __init__(self,v,a,parser):
+		Node.__init__(self,'assign')
 		self.v=v
 		self.a=a
 		
