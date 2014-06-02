@@ -48,7 +48,7 @@ class Int(Node):
         self.value = int(num)
 
     def producer(self):
-		self.registry_entry = self.current_registry.assign_temporary()
+	    self.registry_entry = self.current_registry.assign_temporary()
         self.current_registry.set_temporary(self.registry_entry, self.value)
         code = 'li ' + self.registry_entry + ' ' + str(self.value)
         self.print_code(code)
@@ -59,13 +59,15 @@ class Variable(Node):
     def __init__(self, name, parser):
         Node.__init__(self, 'VARIABLE', parser)
         self.name = name
-        self.exists = False
-        self.var_type = ''
-        self.value_calculation()
-
-    def value_calculation(self):
+        self.exists = table.has_key(name)
+        self.type = ''
 		
-
+		if(self.exists):
+			self.type=table.get_type(name)
+			
+		self.value_calculation()
+			
+    def value_calculation(self):
         table = self.symbol_table
         name = self.name
 
@@ -93,7 +95,7 @@ class BinOp(Node):
 	'<=':operator.le,
 	}
 	
-	mops{'+': 'add',
+	mops={'+': 'add',
 	'-': 'sub',
 	'/': 'div',
 	'*': 'mul',
@@ -108,7 +110,9 @@ class BinOp(Node):
 	def __init__(self,e1,op,e2,parser):
 		Node.__init__(self,'binop')
 		self.e_l=e1
+		self.e_l_n=isinstance(e_l.value, (int,long,float))
 		self.e_r=e2
+		self.e_r_n=isinstance(e_r.value, (int,long,float))
 		self.op=op
 		self.mop=''
 		
@@ -123,10 +127,12 @@ class BinOp(Node):
 
 class Assign(Node):
 	def __init__(self,v,a,parser):
-		Node.__init__(self,'assign')
-		self.v=v
+		Node.__init__(self,'assign',parser)
+		self.var=v
 		self.a=a
+		self.exists=self.var.exists
 		
+	
 	
 	
 class While(Node):
