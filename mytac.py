@@ -145,11 +145,32 @@ class While(Node):
 
 class If(Node):
 
-    def __init__(self, e):
+    def __init__(self, e, parser):
         Node.__init__(self, 'if')
         self.e = e
+        self.else_flag = False
 
+        self.call_label = self.parser.labels.pop()
+        self.if_label = self.parser.new_label()
+        self.else_label = ''
 
+    def jump(self):
+        # falta registos
+        # verificar se o return address esta a ser usado
+        # se estiver mover a stack
+        #'subi $sp, $sp, 4'
+        # guardar o valor na stack
+        #'sw $ra, 0($sp)'
+
+        code = 'jal ' + self.current_label
+
+    #def jump_back(self):
+        # falta registos
+        # verificar se o return address esta a ser usado
+        # obter valor do return address da stack
+        # mover a stack
+
+    #def generate_children:
 '''
 def generate(node):
     global labelcount
