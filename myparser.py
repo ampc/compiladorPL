@@ -63,7 +63,7 @@ class MyParser:
                         | expression GREATEREQUAL expression
                         | expression LESSER expression
                         | expression LESSEREQUAL expression'''
-        t[0]=BinOp(t[1],t[2],t[3],self)
+        p[0]=BinOp(p[1],p[2],p[3],self)
         '''if p[2] == '+':
             p[0] = p[1] + p[3]
         elif p[2] == '-':
@@ -101,7 +101,7 @@ class MyParser:
 
     def p_expression_int(self, p):
         'expression : INT'
-        p[0]=Number(p[1],self)
+        p[0]=Int(p[1],self)
 
     def p_expression_id(self, p):
         'expression : ID'

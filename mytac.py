@@ -108,11 +108,11 @@ class BinOp(Node):
             }
 
     def __init__(self, e1, op, e2, parser):
-        Node.__init__(self, 'binop')
+        Node.__init__(self, 'binop',parser)
         self.e_l = e1
-        self.e_l_n = isinstance(e_l.value, (int, long, float))
+        self.e_l_n = isinstance(self.e_l.value, (int, long, float))
         self.e_r = e2
-        self.e_r_n = isinstance(e_r.value, (int, long, float))
+        self.e_r_n = isinstance(self.e_r.value, (int, long, float))
         self.op = op
         self.mop = ''
 
@@ -120,9 +120,9 @@ class BinOp(Node):
 
     def int_value_calculation(self):
         l = self.e_l.value
-        r = self.e_r.value
-        self.value = self.ops[self.operator](l, r)
-        self.mop = self.mops[self.operator]
+        r = self.e_r.value;print(l);print(r)
+        self.value = self.ops[self.op](l, r)
+        self.mop = self.mops[self.op]
 
 
 class Assign(Node):
