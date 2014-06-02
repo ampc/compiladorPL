@@ -41,7 +41,7 @@ class MyParser:
         'command_assign : ID ASSIGN expression'
         self.symbol_table[p[1]] = p[3]
         variable = Variable(p[1],self)
-        p[0]=Assign
+        p[0]=Assign(p[1],p[3],self)
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
@@ -63,7 +63,7 @@ class MyParser:
                         | expression GREATEREQUAL expression
                         | expression LESSER expression
                         | expression LESSEREQUAL expression'''
-        p[0]=BinOp(p[1],p[2],p[3],self)
+        print(p[3].value);p[0]=BinOp(p[1],p[2],p[3],self)
         '''if p[2] == '+':
             p[0] = p[1] + p[3]
         elif p[2] == '-':

@@ -131,8 +131,10 @@ class Assign(Node):
         Node.__init__(self, 'assign', parser)
         self.var = v
         self.a = a
-        self.exists = self.var.exists
-
+        self.exists = self.var.exists;self.value_calc()
+	
+	def value_calc(self):
+		self.var.value=self.a.value
 
 class While(Node):
 
