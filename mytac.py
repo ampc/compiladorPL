@@ -12,7 +12,7 @@ class Node:
     def __init__(self, node_type, parser):
         self.type = node_type
         self.parser = parser
-        
+
         #self.current_registry = self.parser.current_registry
         #self.current_label = self.parser.current_label
         self.symbol_table = self.parser.symbol_table
@@ -48,7 +48,7 @@ class Int(Node):
         self.value = int(num)
 
     def producer(self):
-	    self.registry_entry = self.current_registry.assign_temporary()
+        self.registry_entry = self.current_registry.assign_temporary()
         self.current_registry.set_temporary(self.registry_entry, self.value)
         code = 'li ' + self.registry_entry + ' ' + str(self.value)
         self.print_code(code)
@@ -61,12 +61,12 @@ class Variable(Node):
         self.name = name
         self.exists = table.has_key(name)
         self.type = ''
-		
-		if(self.exists):
-			self.type=table.get_type(name)
-			
-		self.value_calculation()
-			
+
+        if(self.exists):
+            self.type = table.get_type(name)
+
+        self.value_calculation()
+
     def value_calculation(self):
         table = self.symbol_table
         name = self.name
@@ -78,75 +78,76 @@ class Variable(Node):
             self.value = self.current_registry.get_register(self.registry_entry)'''
 
     def producer(self):
- 
+
         pass
 
 
 class BinOp(Node):
-	ops={'+': operator.add,
-	'-': operator.sub,
-	'/': operator.div,
-	'*':operator.mul,
-	'==': operator.eq,
-	'/=': operator.ne,
-	'>':operator.gt,
-	'>=':operator.ge,
-	'<':operator.lt,
-	'<=':operator.le,
-	}
-	
-	mops={'+': 'add',
-	'-': 'sub',
-	'/': 'div',
-	'*': 'mul',
-	'==': 'seq',
-	'/=': 'sne',
-	'>': 'sgt',
-	'>=': 'sge',
-	'<': 'slt',
-	'<=': 'sle',
-	}
-	
-	def __init__(self,e1,op,e2,parser):
-		Node.__init__(self,'binop')
-		self.e_l=e1
-		self.e_l_n=isinstance(e_l.value, (int,long,float))
-		self.e_r=e2
-		self.e_r_n=isinstance(e_r.value, (int,long,float))
-		self.op=op
-		self.mop=''
-		
-		self.int_value_calculation()
+    ops = {'+': operator.add,
+           '-': operator.sub,
+           '/': operator.div,
+           '*': operator.mul,
+           '==': operator.eq,
+           '/=': operator.ne,
+           '>': operator.gt,
+           '>=': operator.ge,
+           '<': operator.lt,
+           '<=': operator.le,
+           }
 
-	def int_value_calculation(self):
-		l=self.e_l.value
-		r=self.e_r.value
-		self.value=self.ops[self.operator](l,r)
-		self.mop=self.mops[self.operator]
-	
+    mops = {'+': 'add',
+            '-': 'sub',
+            '/': 'div',
+            '*': 'mul',
+            '==': 'seq',
+            '/=': 'sne',
+            '>': 'sgt',
+            '>=': 'sge',
+            '<': 'slt',
+            '<=': 'sle',
+            }
+
+    def __init__(self, e1, op, e2, parser):
+        Node.__init__(self, 'binop')
+        self.e_l = e1
+        self.e_l_n = isinstance(e_l.value, (int, long, float))
+        self.e_r = e2
+        self.e_r_n = isinstance(e_r.value, (int, long, float))
+        self.op = op
+        self.mop = ''
+
+        self.int_value_calculation()
+
+    def int_value_calculation(self):
+        l = self.e_l.value
+        r = self.e_r.value
+        self.value = self.ops[self.operator](l, r)
+        self.mop = self.mops[self.operator]
+
 
 class Assign(Node):
-	def __init__(self,v,a,parser):
-		Node.__init__(self,'assign',parser)
-		self.var=v
-		self.a=a
-		self.exists=self.var.exists
-		
-	
-	
-	
+
+    def __init__(self, v, a, parser):
+        Node.__init__(self, 'assign', parser)
+        self.var = v
+        self.a = a
+        self.exists = self.var.exists
+
+
 class While(Node):
-	def __init__(self,e):
-		Node.__init__(self,'while')
-		self.e=e
-		
-		
+
+    def __init__(self, e):
+        Node.__init__(self, 'while')
+        self.e = e
+
+
 class If(Node):
-	def __init__(self,e):
-		Node.__init__(self,'if')
-		self.e=e
-		
-		
+
+    def __init__(self, e):
+        Node.__init__(self, 'if')
+        self.e = e
+
+
 '''
 def generate(node):
     global labelcount
