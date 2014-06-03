@@ -2,7 +2,7 @@
 from collections import namedtuple
 from mylexer import MyLexer
 import ply.yacc as yacc
-from mytac import If, While, Assign, BinOp, Variable, Int, Minus
+from mytac import If, While, Assign, BinOp, Variable, Int, Minus, Float
 from symbol_table import Symbol_Table
 from registry import Registry
 #from file_output import File_Output
@@ -28,8 +28,7 @@ class MyParser:
         Namedtuples funcionam da seguinte forma:
             - Para criar um novo, fazes "self.table_entry(tipo, valor)";
             - Para aceder a um dos atributos (coisas dentro dos parenteses retos),
-            fazes "st[nome_var].type" ou "st[nome_var].value"
-            
+            fazes "st[nome_var].type" ou "st[nome_var].value" 
         Ja agora, o prof. disse categoricamente que uma tabela de simbolos nao deve
         guardar o valor duma variável, mas sim a sua posição de memória e tipo. No
         meu programa, ela guarda o tipo e o registo em que se encontra o seu valor.
@@ -87,15 +86,13 @@ class MyParser:
                         | expression LESSER expression
                         | expression LESSEREQUAL expression'''
         p[0] = BinOp(p[1], p[2], p[3], self)
-		
 
     def p_expression_uminus(self, p):
         'expression : MINUS expression %prec UMINUS'
         # ISTO NÃO É ASSIM TÃO SIMPLES. VÊ A VERSÃO MAIS RECENTE DO MEU CÓDIGO.
         # BASICAMENTE, QUANDO SE TRATA DUMA VARIÁVEL, É PRECISO NEGAR O SEU VALOR.
         # ISSO IMPLICA UMA INSTRUÇÃO MIPS "neg x, y"
-        p[0] = Minus(p[2],self)
-		
+        p[0] = Minus(p[2], self)
 
     def p_expression_group(self, p):
         'expression : LPAREN expression RPAREN'
@@ -103,12 +100,11 @@ class MyParser:
 
     def p_expression_real(self, p):
         'expression : FLOAT'
-        p[0]= FLOAT(p[1],self)
+        p[0] = Float(p[1], self)
 
     def p_expression_int(self, p):
         'expression : INT'
         p[0] = Int(p[1], self)
-		
 
     def p_expression_id(self, p):
         'expression : ID'

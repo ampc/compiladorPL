@@ -8,10 +8,11 @@ import operator
 
 
 class Node:
-	index=0
-	temps={0:False,1:False,2:False,3:False,4:False,5:False,6:False,7:False,8:False,9:False}
-	stack=[]
-	
+    index = 0
+    temps = {0: False, 1: False, 2: False, 3: False, 4:
+             False, 5: False, 6: False, 7: False, 8: False, 9: False}
+    stack = []
+
     def __init__(self, node_type, parser):
         self.type = node_type
         self.parser = parser
@@ -19,7 +20,7 @@ class Node:
         self.current_label = self.parser.current_label
         self.st = self.parser.st
 
-        #self.file_writer = self.parser.file_writer
+        # self.file_writer = self.parser.file_writer
         self.value = None
         self.table_entry = ''
 
@@ -135,7 +136,7 @@ class BinOp(Node):
         self.mop = ''
 
         self.int_val_calc()
-		print(self.generate())
+        print(self.generate())
 
     def int_val_calc(self):
         l = self.e_l.value
@@ -143,37 +144,40 @@ class BinOp(Node):
         self.value = self.ops[self.op](l, r)
         self.mop = self.mops[self.op]
 
-	def generate(self):
-		code=''
-		if(self.e_l_n):
-			code+='li $t'+str(index)+', '+str(self.e_l.value)
-			stack.append(index)
-			temps[index]=True
-			index+=1
-		else:
-			code+='move $t'+str(index)+', '+str(self.e_l.value)
-			stack.append(index)
-			temps[index]=True
-			index+=1
-		if(self.e_r_n):
-			code+='li $t'+str(index)+', '+str(self.e_r.value)
-			stack.append(index)
-			temps[index]=True
-			index+=1
-		else:
-			code+='move $t'+str(i)+', '+str(self.e_r.value)
-			stack.append(index)
-			temps[index]=True
-			index+=1
-		if(len(stack>1)):
-			code+=self.mop+' $t'+str(index)+' $t'+str(stack.pop())+' $t'+str(stack.pop())
-			temps[index]=True
-			index-=1
-			temps[index]=False
-			index-=1
-			temps[index]=False
-		return(code)
-			
+    def generate(self):
+        code = ''
+        if(self.e_l_n):
+            code += 'li $t' + str(index) + ', ' + str(self.e_l.value)
+            stack.append(index)
+            temps[index] = True
+            index += 1
+        else:
+            code += 'move $t' + str(index) + ', ' + str(self.e_l.value)
+            stack.append(index)
+            temps[index] = True
+            index += 1
+        if(self.e_r_n):
+            code += 'li $t' + str(index) + ', ' + str(self.e_r.value)
+            stack.append(index)
+            temps[index] = True
+            index += 1
+        else:
+            code += 'move $t' + str(i) + ', ' + str(self.e_r.value)
+            stack.append(index)
+            temps[index] = True
+            index += 1
+        if(len(stack > 1)):
+            code += self.mop + ' $t' + \
+                str(index) + ' $t' + str(stack.pop()) + \
+                ' $t' + str(stack.pop())
+            temps[index] = True
+            index -= 1
+            temps[index] = False
+            index -= 1
+            temps[index] = False
+        return(code)
+
+
 class Assign(Node):
 
     def __init__(self, v, a, parser):
