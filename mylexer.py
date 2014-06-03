@@ -17,7 +17,7 @@ class MyLexer:
     # List of tokens
     tokens = [
         'INT',
-        'REAL',
+        'FLOAT',
         'ID',
         'PLUS',
         'MINUS',
@@ -56,7 +56,7 @@ class MyLexer:
     def build(self, **kwargs):
         self.lexer = lex.lex(object=self, **kwargs)
 
-    def t_REAL(self, t):
+    def FLOAT(self, t):
         r'\d+\.\d+'
         t.value = float(t.value)
         return t

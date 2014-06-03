@@ -102,7 +102,8 @@ class MyParser:
         p[0] = p[2]
 
     def p_expression_real(self, p):
-        'expression : REAL'
+        'expression : FLOAT'
+		p[0]= FLOAT(p[1],self)
 
     def p_expression_int(self, p):
         'expression : INT'

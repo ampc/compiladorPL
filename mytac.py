@@ -23,7 +23,7 @@ class Node:
     def semantic_analysis(self):
         pass
 
-    def value_calculation(self):
+    def val_calc(self):
         pass
 
     def produce_children(self):
@@ -40,14 +40,25 @@ class Int(Node):
 
     def __init__(self, num, parser):
         Node.__init__(self, 'INT', parser)
-        self.value_calculation(num)
+        self.val_calc(num)
 
-    def value_calculation(self, num):
+    def val_calc(self, num):
         self.value = int(num)
 
     def producer(self):
         self.print_code(code)
 
+
+class Float(Node):
+	
+	def __init__(self,num,parser):
+		Node.__init__(self,'FLOAT',parser)
+		self.val_calc(num)
+		
+	def val_calc(self,num):
+		self.value=float(num)
+		
+	
 		
 class Minus(Node):
 	def __init__(self, node, parser):
@@ -74,9 +85,9 @@ class Variable(Node):
 
         if(self.exists):
             self.type = self.st.get_type(name)
-            self.value_calculation()
+            self.val_calc()
 
-    def value_calculation(self):
+    def val_calc(self):
         table = self.st
         name = self.name
 
@@ -123,9 +134,9 @@ class BinOp(Node):
         self.op = op
         self.mop = ''
 
-        self.int_value_calculation()
+        self.int_val_calc()
 
-    def int_value_calculation(self):
+    def int_val_calc(self):
         l = self.e_l.value
         r = self.e_r.value
         print(l)
