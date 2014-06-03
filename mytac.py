@@ -50,31 +50,28 @@ class Int(Node):
 
 
 class Float(Node):
-	
-	def __init__(self,num,parser):
-		Node.__init__(self,'FLOAT',parser)
-		self.val_calc(num)
-		
-	def val_calc(self,num):
-		self.value=float(num)
-		
-	
-		
+
+    def __init__(self, num, parser):
+        Node.__init__(self, 'FLOAT', parser)
+        self.val_calc(num)
+
+    def val_calc(self, num):
+        self.value = float(num)
+
+
 class Minus(Node):
-	def __init__(self, node, parser):
-		Node.__init__(self,'MINUS',parser)
-		self.node=node
-		self.parser=parser
-		
-		if(self.node.type=='INT'):
-			self.value=-self.node.value
-		elif(self.node.type=='VARIABLE'):
-			self.value=-self.parser.st.get_value(self.node.name)
-		
-	
-		
-			
-			
+
+    def __init__(self, node, parser):
+        Node.__init__(self, 'MINUS', parser)
+        self.node = node
+        self.parser = parser
+
+        if(self.node.type == 'INT'):
+            self.value = -self.node.value
+        elif(self.node.type == 'VARIABLE'):
+            self.value = -self.parser.st.get_value(self.node.name)
+
+
 class Variable(Node):
 
     def __init__(self, name, parser):
@@ -183,7 +180,7 @@ class If(Node):
         self.branch_type = ''
         self.guess_type = ''
 
-    #def guess_type(self):
+    # def guess_type(self):
         #
 
     def jump(self):
@@ -220,7 +217,7 @@ class If(Node):
     def branch_op_else(self):
         self.else_flag = True
         self.else_label = self.parser.new_label()
-        branch_ops = self.else_label
+        branch_ops = 'j ' + self.else_label
         print(branch_ops)
         self.parser.current_label = self.else_label
 
@@ -229,14 +226,14 @@ class If(Node):
         self.branch_op()
         if self.expr_reg != '':
             # completar com registos
-            aaaaa
+            apagar = 1
 
     def end_if_statement(self):
         self.jump_back()
         self.parser.current_label = self.call_label
 
     def producer(self):
-        self.jump_back()
+        self.jump()
         self.parser.current_label = self.call_label
 '''
 def generate(node):
