@@ -9,13 +9,13 @@ Trabalho Realizado Por:
 
 Software:
 -Python 2.7
--PLY 
+-PLY 3.4
 
 Ficheiros:
 mylexer.py - Lexer do compilador
 myparser.py - Parser do compilador
-mytac.py - geração de 3AC
-symbol_table.py - ..
-
+mytac.py - Geração de 3AC
+symbol_table.py - Tabela de Simbolos
+teste - ficheiro de teste(input)
 
 Execução: python main.py teste
