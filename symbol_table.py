@@ -1,40 +1,37 @@
 # -*- coding: utf-8 -*-
-from collections import namedtuple #https://docs.python.org/2/library/collections.html
-
-
-'''
-Namedtuples são imutáveis.
-Pode-se eliminar uma entrada do dicionário com del().
-
------
-
-O seguinte só é útil se quisermos que, em vez de obtermos o KeyError,
-ele crie uma nova entrada tendo em conta o namedtuple table_entry.
-
-self.table= defaultdict(table_entry)
-'''
-
+from collections import namedtuple
 
 class Symbol_Table:
-
     def __init__(self):
-        self.table_entry = namedtuple('table_entry', ['type', 'memaddress'])
-        self.table = {}
-
-    def set_value(self, name, vartype, registry):
-        self.table[name] = self.table_entry(vartype, registry)
-
+        self.table_entry= namedtuple('table_entry', ['type', 'value', 'label'])
+        self.table= {}
+    
+    def set_value(self, name, vartype, value, label):
+        self.table[name]= self.table_entry(vartype, value, label)
+    
     def get_type(self, name):
         try:
             return self.table[name].type
         except KeyError:
             return False
-
-    def get_memaddress(self, name):
+    
+    def get_value(self, name):
         try:
-            return self.table[name].memaddress
+            return self.table[name].value
         except KeyError:
             return False
-
+    
+    def get_creation_label(self, name):
+        try:
+            return self.table[name].creation_label
+        except KeyError:
+            return False
+    
+    def get_keys(self):
+        return self.table.keys()
+    
     def has_key(self, name):
         return self.table.has_key(name)
+    
+    def remove_symbol(self, symbol):
+        self.table.pop(symbol)
