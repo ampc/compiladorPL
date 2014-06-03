@@ -14,7 +14,7 @@ class Node:
         self.parser = parser
 
         self.current_label = self.parser.current_label
-        self.symbol_table = self.parser.symbol_table
+        self.st = self.parser.st
         
 
         #self.file_writer = self.parser.file_writer
@@ -46,9 +46,6 @@ class Int(Node):
         self.value = int(num)
 
     def producer(self):
-        self.registry_entry = self.current_registry.assign_temporary()
-        self.current_registry.set_temporary(self.registry_entry, self.value)
-        code = 'li ' + self.registry_entry + ' ' + str(self.value)
         self.print_code(code)
 
 
@@ -57,15 +54,15 @@ class Variable(Node):
     def __init__(self, name, parser):
         Node.__init__(self, 'VARIABLE', parser)
         self.name = name
-        self.exists = self.symbol_table.has_key(name)
+        self.exists = self.st.has_key(name)
         self.type = ''
 
         if(self.exists):
-			self.type = self.symbol_table.get_type(name)
+			self.type = self.st.get_type(name)
 			self.value_calculation()
 
     def value_calculation(self):
-        table = self.symbol_table
+        table = self.st
         name = self.name
 
         if self.exists:
@@ -132,7 +129,7 @@ class Assign(Node):
 	
     def value_calc(self):
 		self.var.value=self.a.value
-		self.symbol_table.set_value(self.var.name,self.var.type,self.var.value,self.parser.current_label)
+		self.st.set_value(self.var.name,self.var.type,self.var.value,self.parser.current_label)
 		
 
 class While(Node):

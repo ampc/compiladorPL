@@ -23,14 +23,14 @@ class MyParser:
 		self.lexer.build()
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self)
-		self.symbol_table=Symbol_Table()
+		self.st=Symbol_Table()
 		
 		
 		'''
 		Namedtuples funcionam da seguinte forma:
 			- Para criar um novo, fazes "self.table_entry(tipo, valor)";
 			- Para aceder a um dos atributos (coisas dentro dos parenteses retos),
-			fazes "symbol_table[nome_var].type" ou "symbol_table[nome_var].value"
+			fazes "st[nome_var].type" ou "st[nome_var].value"
 			
 		Ja agora, o prof. disse categoricamente que uma tabela de simbolos nao deve
 		guardar o valor duma variável, mas sim a sua posição de memória e tipo. No
@@ -54,10 +54,10 @@ class MyParser:
 
     def p_command_assign(self, p):
 		'command_assign : ID ASSIGN expression'
-	    #MANIPULAÇÃO DA TABELA DE SÍMBOLOS DEVE PASSAR PARA O TAC ASSIGN
-		#NÃO ESTÁS A FAZER NADA COM variable
-		variable = Variable(p[1], self)
-		p[0] = Assign(variable, p[3], self)
+		var = Variable(p[1], self)
+		p[0] = Assign(var, p[3], self)
+		print(self.st.get_keys())
+		print(self.st.get_value(var.name))
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
@@ -121,10 +121,12 @@ class MyParser:
     def p_expression_id(self, p):
         'expression : ID'
         try:
-            p[0] = self.symbol_table[p[1]]
+			val = self.st.get_value(p[1])
+			if(isinstance(val,(int,long))):
+				p[0]=Int(val,self)
         except LookupError:
-            print("Undefined name '%s'" % p[1])
-            p[0] = 0
+            return ("Undefined name '%s'" % p[1])
+            
 
     def p_empty(self, p):
         'empty :'
