@@ -48,7 +48,22 @@ class Int(Node):
     def producer(self):
         self.print_code(code)
 
-
+		
+class Minus(Node):
+	def __init__(self, node, parser):
+		Node.__init__(self,'MINUS',parser)
+		self.node=node
+		self.parser=parser
+		
+		if(self.node.type=='INT'):
+			self.value=-self.node.value
+		elif(self.node.type=='VARIABLE'):
+			self.value=-self.parser.st.get_value(self.node.name)
+		
+	
+		
+			
+			
 class Variable(Node):
 
     def __init__(self, name, parser):
@@ -157,10 +172,10 @@ class If(Node):
         self.branch_type = ''
         self.guess_type = ''
 
-    def guess_type(self):
+    #def guess_type(self):
         #
 
-    def jump(self):
+    #def jump(self):
         # falta registos
         # verificar se o return address esta a ser usado
         # se estiver mover a stack
@@ -171,7 +186,7 @@ class If(Node):
         code = 'jal ' + self.current_label
         print(code)
 
-    def jump_back(self):
+    #def jump_back(self):
         # falta registos
         # verificar se o return address esta a ser usado
         # obter valor do return address da stack
@@ -187,7 +202,7 @@ class If(Node):
             self.e.producer()
 
     def branch_op(self):
-        branch_ops = 'bgtz ' + self.e.expr_reg + ', ' self.if_label
+        branch_ops = 'bgtz ' + self.e.expr_reg + ', ' + self.if_label
         print(branch_ops)
         self.parser.current_label = self.if_label
 

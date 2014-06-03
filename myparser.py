@@ -2,7 +2,7 @@
 from collections import namedtuple
 from mylexer import MyLexer
 import ply.yacc as yacc
-from mytac import If, While, Assign, BinOp, Variable, Int
+from mytac import If, While, Assign, BinOp, Variable, Int, Minus
 from symbol_table import Symbol_Table
 from registry import Registry
 #from file_output import File_Output
@@ -87,35 +87,15 @@ class MyParser:
                         | expression LESSER expression
                         | expression LESSEREQUAL expression'''
         p[0] = BinOp(p[1], p[2], p[3], self)
-
-        '''if p[2] == '+':
-            p[0] = p[1] + p[3]
-        elif p[2] == '-':
-            p[0] = p[1] - p[3]
-        elif p[2] == '*':
-            p[0] = p[1] * p[3]
-        elif p[2] == '/':
-            p[0] = p[1] / p[3]
-        elif p[2] == '==':
-            p[0] = p[1] == p[3]
-        elif p[2] == '/=':
-            p[0] = p[1] != p[3]
-        elif p[2] == '>':
-            p[0] = p[1] > p[3]
-        elif p[2] == '>=':
-            p[0] = p[1] >= p[3]
-        elif p[2] == '<':
-            p[0] = p[1] < p[3]
-        elif p[2] == '<':
-            p[0] = p[1] <= p[3]
-            '''
+		
 
     def p_expression_uminus(self, p):
         'expression : MINUS expression %prec UMINUS'
         # ISTO NÃO É ASSIM TÃO SIMPLES. VÊ A VERSÃO MAIS RECENTE DO MEU CÓDIGO.
         # BASICAMENTE, QUANDO SE TRATA DUMA VARIÁVEL, É PRECISO NEGAR O SEU VALOR.
         # ISSO IMPLICA UMA INSTRUÇÃO MIPS "neg x, y"
-        p[0].value = -p[2].value
+        p[0] = Minus(p[2],self)
+		
 
     def p_expression_group(self, p):
         'expression : LPAREN expression RPAREN'
