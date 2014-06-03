@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from collections import namedtuple
 from mylexer import MyLexer
 import ply.yacc as yacc
 from mytac import If, While, Assign, BinOp, Variable, Int
@@ -13,22 +15,32 @@ class MyParser:
         ('left', 'PLUS', 'MINUS'),
         ('left', 'MULT', 'DIV'),
         ('right', 'UMINUS')
-    )
+	)
 
-    symbol_table = {}
+    symbol_table = Symbol_Table()
 
     def __init__(self):
-        self.lexer = MyLexer()
-        self.lexer.build()
-        self.tokens = self.lexer.tokens
-        self.parser = yacc.yacc(module=self)
-
-        # novo
-        self.current_label = 'Label 1'
-        self.labels = []
-        self.label_count = 1
-    # def parse(self, text):
-        # return self.parser.parse(input=text, debug=True)
+		self.lexer = MyLexer()
+		self.lexer.build()
+		self.tokens = self.lexer.tokens
+		self.parser = yacc.yacc(module=self)
+		
+		'''
+		Namedtuples funcionam da seguinte forma:
+			- Para criar um novo, fazes "self.table_entry(tipo, valor)";
+			- Para aceder a um dos atributos (coisas dentro dos parenteses retos),
+			fazes "symbol_table[nome_var].type" ou "symbol_table[nome_var].value"
+			
+		Ja agora, o prof. disse categoricamente que uma tabela de simbolos nao deve
+		guardar o valor duma variável, mas sim a sua posição de memória e tipo. No
+		meu programa, ela guarda o tipo e o registo em que se encontra o seu valor.
+		'''
+		# novo
+		self.current_label = 'Label 1'
+		self.labels = []
+		self.label_count = 1
+		# def parse(self, text):
+		# return self.parser.parse(input=text, debug=True)
 
     def p_command(self, p):
         '''command : command2 SEMI command
@@ -41,9 +53,11 @@ class MyParser:
 
     def p_command_assign(self, p):
         'command_assign : ID ASSIGN expression'
-        self.symbol_table[p[1]] = p[3]
+        #self.symbol_table[p[1]] = p[3]
+	    #MANIPULAÇÃO DA TABELA DE SÍMBOLOS DEVE PASSAR PARA O TAC ASSIGN
+		#NÃO ESTÁS A FAZER NADA COM variable
         variable = Variable(p[1], self)
-        p[0] = Assign(p[1], p[3], self)
+        p[0] = Assign(variable, p[3], self)
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
@@ -63,8 +77,7 @@ class MyParser:
                         | expression GREATEREQUAL expression
                         | expression LESSER expression
                         | expression LESSEREQUAL expression'''
-        print(p[3].value)
-        print(p[3].value);p[0]=BinOp(p[1],p[2],p[3],self)        
+        p[0]=BinOp(p[1],p[2],p[3],self)     
         '''if p[2] == '+':
             p[0] = p[1] + p[3]
         elif p[2] == '-':
@@ -89,6 +102,9 @@ class MyParser:
 
     def p_expression_uminus(self, p):
         'expression : MINUS expression %prec UMINUS'
+		#ISTO NÃO É ASSIM TÃO SIMPLES. VÊ A VERSÃO MAIS RECENTE DO MEU CÓDIGO.
+		#BASICAMENTE, QUANDO SE TRATA DUMA VARIÁVEL, É PRECISO NEGAR O SEU VALOR.
+		#ISSO IMPLICA UMA INSTRUÇÃO MIPS "neg x, y"
         p[0].value = -p[2].value
 
     def p_expression_group(self, p):

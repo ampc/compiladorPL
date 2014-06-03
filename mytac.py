@@ -13,14 +13,11 @@ class Node:
         self.type = node_type
         self.parser = parser
 
-        #self.current_registry = self.parser.current_registry
-        #self.current_label = self.parser.current_label
+        self.current_label = self.parser.current_label
         self.symbol_table = self.parser.symbol_table
-        #self.registry_iterator = self.parser.registry_iterator
+        
 
         #self.file_writer = self.parser.file_writer
-
-        self.registry_entry = ''
         self.value = None
 
     def semantic_analysis(self):
@@ -42,7 +39,8 @@ class Node:
 class Int(Node):
 
     def __init__(self, num, parser):
-        Node.__init__(self, 'INT', parser)
+		Node.__init__(self, 'INT', parser)
+		self.value_calculation(num)
 
     def value_calculation(self, num):
         self.value = int(num)
@@ -59,13 +57,12 @@ class Variable(Node):
     def __init__(self, name, parser):
         Node.__init__(self, 'VARIABLE', parser)
         self.name = name
-        self.exists = table.has_key(name)
+        self.exists = self.symbol_table.has_key(name)
         self.type = ''
 
         if(self.exists):
-            self.type = table.get_type(name)
-
-        self.value_calculation()
+			self.type = self.symbol_table.get_type(name)
+			self.value_calculation()
 
     def value_calculation(self):
         table = self.symbol_table
@@ -128,12 +125,13 @@ class BinOp(Node):
 class Assign(Node):
 
     def __init__(self, v, a, parser):
-        Node.__init__(self, 'assign', parser)
-        self.var = v
-        self.a = a
-        self.exists = self.var.exists;self.value_calc()
+		Node.__init__(self, 'assign', parser)
+		self.var = v
+		self.a = a
+		self.exists = self.var.exists
+		self.value_calc()
 	
-	def value_calc(self):
+    def value_calc(self):
 		self.var.value=self.a.value
 
 class While(Node):
