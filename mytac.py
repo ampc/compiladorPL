@@ -146,6 +146,8 @@ class BinOp(Node):
 
     def generate(self):
         code = ''
+		index=Node.index
+		stack=Node.stack
         if(self.e_l_n):
             code += 'li $t' + str(index) + ', ' + str(self.e_l.value)
             stack.append(index)
@@ -171,10 +173,9 @@ class BinOp(Node):
                 str(index) + ' $t' + str(stack.pop()) + \
                 ' $t' + str(stack.pop())
             temps[index] = True
-            index -= 1
-            temps[index] = False
-            index -= 1
-            temps[index] = False
+            temps[index-1] = False
+            temps[index-2] = False
+			stack.append(index)
         return(code)
 
 
