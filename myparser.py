@@ -53,7 +53,8 @@ class MyParser:
         'command_assign : ID ASSIGN expression'
         var = Variable(p[1], self)
         p[0] = Assign(var, p[3], self)
-        
+        print(self.st.get_keys())
+        print(self.st.get_value(var.name))
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'
@@ -61,17 +62,17 @@ class MyParser:
     def p_command_if(self, p):
         '''command_if : IF new_label expression THEN BEGIN new_if command END
                         | IF new_label expression THEN BEGIN new_if command END ELSE else_expr BEGIN command END'''
-        # p[0] = p[6]
-        # p[6].end_if_statement()
+        p[0] = p[6]
+        p[6].end_if_statement()
 
     def p_new_if(self, p):
-        # 'new_if :'
-        # p[0] = If(p[-3], self)
-        # p[0].producer()
+        'new_if :'
+        p[0] = If(p[-3], self)
+        p[0].producer()
 
     def p_else_expr(self, p):
-		# 'else_expr :'
-        # p[-4].branch_op_else()
+        'else_expr :'
+        p[-4].branch_op_else()
 
     def p_expression_binary(self, p):
         '''expression : expression PLUS expression
@@ -122,9 +123,9 @@ class MyParser:
         print("Syntax error at '%s'" % p.value)
 
      # novo branches/ifs/ciclos
-    # def new_label(self):
-        # self.label_count += 1
-        # return 'Label ' + str(self.label_count)
+    def new_label(self):
+        self.label_count += 1
+        return 'Label ' + str(self.label_count)
 
     def switch_current_label(self):
         self.labels.append(self.current_label)
