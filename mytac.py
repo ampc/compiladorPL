@@ -15,10 +15,10 @@ class Node:
 
         self.current_label = self.parser.current_label
         self.st = self.parser.st
-        
 
         #self.file_writer = self.parser.file_writer
         self.value = None
+        self.table_entry = ''
 
     def semantic_analysis(self):
         pass
@@ -39,8 +39,8 @@ class Node:
 class Int(Node):
 
     def __init__(self, num, parser):
-		Node.__init__(self, 'INT', parser)
-		self.value_calculation(num)
+        Node.__init__(self, 'INT', parser)
+        self.value_calculation(num)
 
     def value_calculation(self, num):
         self.value = int(num)
@@ -58,8 +58,8 @@ class Variable(Node):
         self.type = ''
 
         if(self.exists):
-			self.type = self.st.get_type(name)
-			self.value_calculation()
+            self.type = self.st.get_type(name)
+            self.value_calculation()
 
     def value_calculation(self):
         table = self.st
@@ -100,7 +100,7 @@ class BinOp(Node):
             }
 
     def __init__(self, e1, op, e2, parser):
-        Node.__init__(self, 'binop',parser)
+        Node.__init__(self, 'binop', parser)
         self.e_l = e1
         self.e_l_n = isinstance(self.e_l.value, (int, long, float))
         self.e_r = e2
@@ -112,7 +112,9 @@ class BinOp(Node):
 
     def int_value_calculation(self):
         l = self.e_l.value
-        r = self.e_r.value;print(l);print(r)
+        r = self.e_r.value
+        print(l)
+        print(r)
         self.value = self.ops[self.op](l, r)
         self.mop = self.mops[self.op]
 
@@ -120,17 +122,18 @@ class BinOp(Node):
 class Assign(Node):
 
     def __init__(self, v, a, parser):
-		Node.__init__(self, 'assign', parser)
-		self.var = v
-		self.a = a
-		self.exists = self.var.exists
-		self.parser=parser
-		self.value_calc()
-	
+        Node.__init__(self, 'assign', parser)
+        self.var = v
+        self.a = a
+        self.exists = self.var.exists
+        self.parser = parser
+        self.value_calc()
+
     def value_calc(self):
-		self.var.value=self.a.value
-		self.st.set_value(self.var.name,self.var.type,self.var.value,self.parser.current_label)
-		
+        self.var.value = self.a.value
+        self.st.set_value(self.var.name, self.var.type,
+                          self.var.value, self.parser.current_label)
+
 
 class While(Node):
 
@@ -144,11 +147,18 @@ class If(Node):
     def __init__(self, e, parser):
         Node.__init__(self, 'if')
         self.e = e
+        self.expr_reg = self.e.table_entry
         self.else_flag = False
 
         self.call_label = self.parser.labels.pop()
         self.if_label = self.parser.new_label()
         self.else_label = ''
+
+        self.branch_type = ''
+        self.guess_type = ''
+
+    def guess_type(self):
+        #
 
     def jump(self):
         # falta registos
@@ -159,14 +169,49 @@ class If(Node):
         #'sw $ra, 0($sp)'
 
         code = 'jal ' + self.current_label
+        print(code)
 
-    #def jump_back(self):
+    def jump_back(self):
         # falta registos
         # verificar se o return address esta a ser usado
         # obter valor do return address da stack
         # mover a stack
+        code = 'jr $ra'
+        print(code)
 
-    #def generate_children:
+    def produce_children(self):
+        if self.e.table_entry.type == 'BINARY':
+            branch_flag = False
+            self.e.producer(branch_flag)
+        else:
+            self.e.producer()
+
+    def branch_op(self):
+        branch_ops = 'bgtz ' + self.e.expr_reg + ', ' self.if_label
+        print(branch_ops)
+        self.parser.current_label = self.if_label
+
+    def branch_op_else(self):
+        self.else_flag = True
+        self.else_label = self.parser.new_label()
+        branch_ops = self.else_label
+        print(branch_ops)
+        self.parser.current_label = self.else_label
+
+    def condition_control_op(self):
+        self.produce_children()
+        self.branch_op()
+        if self.expr_reg != '':
+            # completar com registos
+            aaaaa
+
+    def end_if_statement(self):
+        self.jump_back()
+        self.parser.current_label = self.call_label
+
+    def producer(self):
+        self.jump_back()
+        self.parser.current_label = self.call_label
 '''
 def generate(node):
     global labelcount
