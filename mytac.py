@@ -146,35 +146,45 @@ class BinOp(Node):
 
     def generate(self):
         code = ''
+        index=Node.index
+        stack=Node.stack
+        temps=Node.temps
         if(self.e_l_n):
-            code += 'li $t' + str(index) + ', ' + str(self.e_l.value)
+            code += 'li $t' + str(index) + ', ' + str(self.e_l.value)+'\n'
             stack.append(index)
-            temps[index] = True
-            index += 1
+            while(temps[index]==True):
+				index+=1
+		    temps[index] = True
         else:
-            code += 'move $t' + str(index) + ', ' + str(self.e_l.value)
+            code += 'move $t' + str(index) + ', ' + str(self.e_l.value)+'\n'
             stack.append(index)
-            temps[index] = True
-            index += 1
+            while(temps[index]==True):
+				index+=1
+			temps[index] = True
         if(self.e_r_n):
-            code += 'li $t' + str(index) + ', ' + str(self.e_r.value)
+            code += 'li $t' + str(index) + ', ' + str(self.e_r.value)+'\n'
             stack.append(index)
-            temps[index] = True
-            index += 1
+			while(temps[index]==True):
+				index+=1
+			temps[index] = True
+            
         else:
-            code += 'move $t' + str(i) + ', ' + str(self.e_r.value)
+            code += 'move $t' + str(i) + ', ' + str(self.e_r.value)+'\n'
             stack.append(index)
-            temps[index] = True
-            index += 1
-        if(len(stack > 1)):
+            while(temps[index]==True):
+				index+=1
+			temps[index] = True
+        if(len(stack) > 1):
             code += self.mop + ' $t' + \
                 str(index) + ' $t' + str(stack.pop()) + \
                 ' $t' + str(stack.pop())
             temps[index] = True
-            index -= 1
-            temps[index] = False
-            index -= 1
-            temps[index] = False
+            temps[index-1] = False
+            temps[index-2] = False
+            stack.append(index)
+		Node.index=index
+		Node.stack=stack
+		Node.temps=temps
         return(code)
 
 
