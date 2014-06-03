@@ -175,7 +175,7 @@ class If(Node):
     #def guess_type(self):
         #
 
-    #def jump(self):
+    def jump(self):
         # falta registos
         # verificar se o return address esta a ser usado
         # se estiver mover a stack
@@ -186,7 +186,7 @@ class If(Node):
         code = 'jal ' + self.current_label
         print(code)
 
-    #def jump_back(self):
+    def jump_back(self):
         # falta registos
         # verificar se o return address esta a ser usado
         # obter valor do return address da stack
