@@ -8,7 +8,10 @@ import operator
 
 
 class Node:
-
+	index=0
+	temps={0:False,1:False,2:False,3:False,4:False,5:False,6:False,7:False,8:False,9:False}
+	stack=[]
+	
     def __init__(self, node_type, parser):
         self.type = node_type
         self.parser = parser
@@ -113,7 +116,7 @@ class BinOp(Node):
     mops = {'+': 'add',
             '-': 'sub',
             '/': 'div',
-            '*': 'mul',
+            '*': 'mult',
             '==': 'seq',
             '/=': 'sne',
             '>': 'sgt',
@@ -132,16 +135,45 @@ class BinOp(Node):
         self.mop = ''
 
         self.int_val_calc()
+		print(self.generate())
 
     def int_val_calc(self):
         l = self.e_l.value
         r = self.e_r.value
-        print(l)
-        print(r)
         self.value = self.ops[self.op](l, r)
         self.mop = self.mops[self.op]
 
-
+	def generate(self):
+		code=''
+		if(self.e_l_n):
+			code+='li $t'+str(index)+', '+str(self.e_l.value)
+			stack.append(index)
+			temps[index]=True
+			index+=1
+		else:
+			code+='move $t'+str(index)+', '+str(self.e_l.value)
+			stack.append(index)
+			temps[index]=True
+			index+=1
+		if(self.e_r_n):
+			code+='li $t'+str(index)+', '+str(self.e_r.value)
+			stack.append(index)
+			temps[index]=True
+			index+=1
+		else:
+			code+='move $t'+str(i)+', '+str(self.e_r.value)
+			stack.append(index)
+			temps[index]=True
+			index+=1
+		if(len(stack>1)):
+			code+=self.mop+' $t'+str(index)+' $t'+str(stack.pop())+' $t'+str(stack.pop())
+			temps[index]=True
+			index-=1
+			temps[index]=False
+			index-=1
+			temps[index]=False
+		return(code)
+			
 class Assign(Node):
 
     def __init__(self, v, a, parser):
@@ -235,94 +267,3 @@ class If(Node):
     def producer(self):
         self.jump()
         self.parser.current_label = self.call_label
-'''
-def generate(node):
-    global labelcount
-    global tempcount
-    global count
-    global depth
-    global prefix
-    global argcount
-    label = ""
-    aux = 0
-    expr = ""
-    labels = []
-    dict = {}
-    value = node.value
-    # print "generate type:" + node.type +" value:" + str(node.value)
-    if node.value in auxd.keys():
-        value = auxd[node.value]
-    if node.type == "command":
-        if depth == 0:
-            print "GOTO MAIN"
-        for i in node.children:
-            depth += 1
-            expr += str(generate(i))
-            depth -= 1
-        if depth == 0:
-            print "MAIN: "
-        return expr
-    if node.type == "command2":
-        expr += str(generate(node.children[0]))
-        return expr
-    elif node.type == "command_if":
-        label = "LABEL" + str(labelcount)
-        labelcount += 1
-        labels.insert(0, label)
-        expr = "IF " + generate(node.children[0]) + " GOTO " + label + "\n"
-        count = 0
-        if len(node.children) == 3:
-            label = "LABEL" + str(labelcount)
-            labelcount += 1
-            labels.insert(0, label)
-            expr += "GOTO " + label + "\n"
-        for v in range(len(node.children)):
-            if v != 0:
-                expr += str(labels.pop()) + " : " + \
-                    str(generate(node.children[v]))
-        return expr
-    elif node.type == "command_while":
-        label = "LABEL" + str(labelcount)
-        labelcount += 1
-        labels.insert(0, label)
-        expr = label + ": "
-        label = "LABEL" + str(labelcount)
-        labelcount += 1
-        labels.insert(0, label)
-        expr += "IFFALSE " + \
-            generate(node.children[0]) + " GOTO " + label + "\n"
-        count = 0
-        for v in range(len(node.children)):
-            if v != 0:
-                expr += "\n" + str(generate(node.children[v]))
-        expr += "\nGOTO " + label + "\n" + label + ":"
-        return expr
-    elif node.type in ["expression_real", "expression_int"]:
-        count += 1
-        return node.value
-    elif node.type == "expression_uminus":
-        return value + str(generate(node.children[0]))
-    elif node.type == "expression_binary":
-        temp = str(generate(node.children[0]))
-        if temp[0] == "t":
-            aux += 1
-        expr = temp + " " + value + " "
-        temp = str(generate(node.children[1]))
-        expr += temp
-        if temp[0] == "t":
-            aux += 1
-        if count > 2:
-            temp = "t" + str(tempcount)
-            tempcount += 1
-            if aux > 0:
-                count -= 1
-            else:
-                count -= 2
-            print temp + " = " + expr
-            return temp
-        return expr
-    elif node.type == "command_assign":
-        expr = str(node.children[0]) + " " + node.value + \
-            " " + str(generate(node.children[1])) + "\n"
-        return expr
-'''
