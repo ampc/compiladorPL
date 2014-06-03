@@ -57,7 +57,7 @@ class MyLexer:
         self.lexer = lex.lex(object=self, **kwargs)
 
     def t_REAL(self, t):
-        r'-?\d+\.\d*(e-?\d+)?'
+        r'\d+\.\d+'
         t.value = float(t.value)
         return t
 
