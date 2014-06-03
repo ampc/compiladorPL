@@ -17,13 +17,14 @@ class MyParser:
         ('right', 'UMINUS')
 	)
 
-    symbol_table = Symbol_Table()
 
     def __init__(self):
 		self.lexer = MyLexer()
 		self.lexer.build()
 		self.tokens = self.lexer.tokens
 		self.parser = yacc.yacc(module=self)
+		self.symbol_table=Symbol_Table()
+		
 		
 		'''
 		Namedtuples funcionam da seguinte forma:
@@ -52,12 +53,11 @@ class MyParser:
                     | command_if'''
 
     def p_command_assign(self, p):
-        'command_assign : ID ASSIGN expression'
-        #self.symbol_table[p[1]] = p[3]
+		'command_assign : ID ASSIGN expression'
 	    #MANIPULAÇÃO DA TABELA DE SÍMBOLOS DEVE PASSAR PARA O TAC ASSIGN
 		#NÃO ESTÁS A FAZER NADA COM variable
-        variable = Variable(p[1], self)
-        p[0] = Assign(variable, p[3], self)
+		variable = Variable(p[1], self)
+		p[0] = Assign(variable, p[3], self)
 
     def p_command_while(self, p):
         'command_while : WHILE expression DO command DONE'

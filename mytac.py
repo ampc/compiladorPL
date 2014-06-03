@@ -68,11 +68,9 @@ class Variable(Node):
         table = self.symbol_table
         name = self.name
 
-        '''if table.has_key(name):
-            self.exists = True
+        if self.exists:
             self.var_type = table.get_type(name)
-            self.registry_entry = table.get_memaddress(name)
-            self.value = self.current_registry.get_register(self.registry_entry)'''
+            self.value = table.get_value(name)
 
     def producer(self):
 
@@ -129,10 +127,13 @@ class Assign(Node):
 		self.var = v
 		self.a = a
 		self.exists = self.var.exists
+		self.parser=parser
 		self.value_calc()
 	
     def value_calc(self):
 		self.var.value=self.a.value
+		self.symbol_table.set_value(self.var.name,self.var.type,self.var.value,self.parser.current_label)
+		
 
 class While(Node):
 
