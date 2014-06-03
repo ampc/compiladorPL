@@ -60,19 +60,22 @@ class MyParser:
         'command_while : WHILE expression DO command DONE'
 
     def p_command_if(self, p):
-        '''command_if : IF new_label expression THEN BEGIN new_if command END
-                        | IF new_label expression THEN BEGIN new_if command END ELSE else_expr BEGIN command END'''
-        p[0] = p[6]
-        p[6].end_if_statement()
+        '''command_if : IF expression THEN BEGIN command
+                        | IF expression THEN BEGIN command ELSE BEGIN command END'''
 
-    def p_new_if(self, p):
+        p[0] = p[6]
+        # p[6].end_if_statement()
+
+    '''def p_new_if(self, p):
         'new_if :'
         p[0] = If(p[-3], self)
         p[0].producer()
+    '''
 
-    def p_else_expr(self, p):
+    '''def p_else_expr(self, p):
         'else_expr :'
         p[-4].branch_op_else()
+    '''
 
     def p_expression_binary(self, p):
         '''expression : expression PLUS expression
